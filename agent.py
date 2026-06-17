@@ -127,9 +127,16 @@ class KardsAgent:
 
     def run(self):
         self._running = True
+        try:
+            resp = self._http.get(f"{self.server_url}/health", timeout=10)
+            logger.info("connected to server: %s", resp.json())
+        except Exception as exc:
+            logger.warning("server health check failed: %s", exc)
         logger.info("Kards Agent started, polling %s every %.1fs", self.server_url + POLL_PATH, self.poll_interval)
 
         last_error_log = 0.0
+        last_heartbeat = time.monotonic()
+        heartbeat_interval = 30.0
         while self._running:
             try:
                 task = self.poll_task()
@@ -140,6 +147,10 @@ class KardsAgent:
                     self.submit_result(task_id, result)
                     logger.info("task done: %s", task_id)
                 else:
+                    now = time.monotonic()
+                    if now - last_heartbeat >= heartbeat_interval:
+                        logger.info("heartbeat: polling... (no tasks)")
+                        last_heartbeat = now
                     if self._running:
                         time.sleep(self.poll_interval)
             except Exception as exc:
