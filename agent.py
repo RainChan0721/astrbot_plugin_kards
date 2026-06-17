@@ -128,8 +128,8 @@ class KardsAgent:
     def run(self):
         self._running = True
         try:
-            resp = self._http.get(f"{self.server_url}/health", timeout=10)
-            logger.info("connected to server: %s", resp.json())
+            resp = self._http.post(f"{self.server_url}{POLL_PATH}", json={}, timeout=10)
+            logger.info("connected to server, poll response: %s %s", resp.status_code, resp.text[:200])
         except Exception as exc:
             logger.warning("server health check failed: %s", exc)
         logger.info("Kards Agent started, polling %s every %.1fs", self.server_url + POLL_PATH, self.poll_interval)
