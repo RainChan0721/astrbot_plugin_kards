@@ -1,3 +1,5 @@
+"""AI决策模块：规则引擎 + LLM 双模式。"""
+
 from __future__ import annotations
 
 import logging
@@ -5,6 +7,8 @@ import logging
 from .game_state import GameState
 
 logger = logging.getLogger(__name__)
+
+MAX_PLAY_PER_TURN = 2
 
 
 class DecisionEngine:
@@ -40,7 +44,7 @@ end_turn
         actions = []
         playable = [c for c in state.my_hand if c.cost <= state.my_kredits]
         playable.sort(key=lambda c: c.cost, reverse=True)
-        for card in playable[:2]:
+        for card in playable[:MAX_PLAY_PER_TURN]:
             actions.append(f"play {card.index}")
         if state.my_units:
             opp_sorted = sorted(state.opp_units, key=lambda u: u.attack or 0, reverse=True)

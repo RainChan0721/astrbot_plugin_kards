@@ -1,8 +1,10 @@
+"""KardsBot 核心，串联截图→识别→决策→操作。"""
+
 from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Optional
+from typing import Optional, Callable
 
 from .screen import ScreenCapturer
 from .ocr import OcrReader

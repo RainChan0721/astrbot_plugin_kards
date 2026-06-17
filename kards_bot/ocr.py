@@ -1,3 +1,5 @@
+"""OCR文字识别模块，基于 Tesseract。"""
+
 import logging
 from typing import Optional
 
@@ -19,7 +21,7 @@ class OcrReader:
         if not HAS_TESSERACT:
             logger.warning("pytesseract not installed, OCR disabled")
 
-    def preprocess(self, region: np.ndarray) -> np.ndarray:
+    def _preprocess(self, region: np.ndarray) -> np.ndarray:
         gray = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         denoised = cv2.fastNlMeansDenoising(thresh, h=30)
@@ -29,7 +31,7 @@ class OcrReader:
         if not HAS_TESSERACT:
             return ""
         try:
-            processed = self.preprocess(region)
+            processed = self._preprocess(region)
             custom_config = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789"
             text = pytesseract.image_to_string(processed, config=custom_config, lang=self.lang)
             return text.strip()
@@ -41,7 +43,7 @@ class OcrReader:
         if not HAS_TESSERACT:
             return ""
         try:
-            processed = self.preprocess(region)
+            processed = self._preprocess(region)
             custom_config = r"--oem 3 --psm 7"
             text = pytesseract.image_to_string(processed, config=custom_config, lang=self.lang)
             return text.strip()

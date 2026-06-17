@@ -1,3 +1,5 @@
+"""跨平台屏幕捕获模块。支持 Linux (grim/hyprctl/mss), Windows, macOS。"""
+
 import os
 import re
 import json

@@ -1,3 +1,5 @@
+"""跨平台模拟输入模块。Linux Wayland 用 ydotool，其余用 pyautogui。"""
+
 import os
 import logging
 import subprocess

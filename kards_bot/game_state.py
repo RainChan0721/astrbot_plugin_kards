@@ -1,3 +1,5 @@
+"""Kards 游戏状态表示与截图解析。"""
+
 from __future__ import annotations
 
 import logging
