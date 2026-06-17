@@ -1,10 +1,8 @@
 {
-  "schema": {
-    "access_token": {
-      "description": "Agent访问令牌（可选，为空则不鉴权）",
-      "type": "string",
-      "default": "",
-      "hint": "设置后本地agent需要带上相同token才能连接"
-    }
+  "access_token": {
+    "type": "string",
+    "description": "Agent访问令牌（可选，为空则不鉴权）",
+    "default": "",
+    "hint": "设置后本地agent需要带上相同token才能连接"
   }
 }
