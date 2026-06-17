@@ -10,12 +10,6 @@ from astrbot.api import AstrBotConfig, logger
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 
-try:
-    from quart import jsonify, request as quart_request
-except ImportError:
-    jsonify = None
-    quart_request = None
-
 COMMAND_PREFIX = "/kards"
 COMMANDS = {
     "start": "启动Kards Bot并分析当前局面",
@@ -104,27 +98,24 @@ class KardsPlugin(Star):
         except Exception as exc:
             return {"error": str(exc)}
 
-    def _check_token(self) -> bool:
-        if not self._access_token:
-            return True
-        try:
-            token = quart_request.headers.get("Authorization", "").removeprefix("Bearer ")
-            return token == self._access_token
-        except Exception:
-            return False
-
     async def _api_agent_poll(self):
-        if not self._check_token():
-            return jsonify({"error": "unauthorized"}), 401
+        from quart import jsonify, request
+        if self._access_token:
+            auth = request.headers.get("Authorization", "")
+            if auth.removeprefix("Bearer ") != self._access_token:
+                return jsonify({"error": "unauthorized"}), 401
         if not self._task_queue:
             return jsonify({"task": None})
         task = self._task_queue.pop(0)
         return jsonify({"task": task})
 
     async def _api_agent_result(self):
-        if not self._check_token():
-            return jsonify({"error": "unauthorized"}), 401
-        data = await quart_request.get_json(force=True, silent=True)
+        from quart import jsonify, request
+        if self._access_token:
+            auth = request.headers.get("Authorization", "")
+            if auth.removeprefix("Bearer ") != self._access_token:
+                return jsonify({"error": "unauthorized"}), 401
+        data = await request.get_json(force=True, silent=True)
         if not isinstance(data, dict):
             return jsonify({"status": "error", "message": "invalid payload"})
         task_id = data.get("task_id", "")
