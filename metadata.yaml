@@ -1,0 +1,11 @@
+name: astrbot_plugin_kards
+display_name: Kards Bot
+desc: 让AstrBot能玩Kards卡牌游戏——屏幕识别+AI决策+模拟操作，支持群友对战和人类干预
+version: v0.1.0
+author: 雪乃
+repo: https://github.com/kswag72/astrbot_plugin_kards
+support_platforms:
+  - aiocqhttp
+  - telegram
+  - discord
+astrbot_version: ">=4.16"

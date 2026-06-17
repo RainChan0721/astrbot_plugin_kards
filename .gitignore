@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# 截图缓存
+kards_screenshot*.png
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# 日志
+*.log
+
+# 本地配置（包含access_token等敏感信息）
+local_config.json
+.env
+
+# Agent运行时文件
+agent.pid
